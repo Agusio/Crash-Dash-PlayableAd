@@ -2,3 +2,4 @@
 * text=auto
 # Ignore downloaded packages
 Assets/Packages/** linguist-vendored
+Packages/** linguist-generated
