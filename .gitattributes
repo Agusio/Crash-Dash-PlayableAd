@@ -1,3 +1,4 @@
 # Auto detect text files and perform LF normalization
 * text=auto
-Assets/Packages/ ** linguist-vendored
+# Ignore downloaded packages
+Assets/Packages/** linguist-vendored
