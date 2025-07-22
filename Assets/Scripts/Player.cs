@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -8,24 +6,24 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform[] positions;
     [SerializeField] private AudioSource crashAudio;
     [SerializeField] private GameObject particles;
+    
     private int _index = 1;
     private Vector3 _currentPos;
-    [SerializeField] private float turnAngle = 15f;
-    [SerializeField] private float turnDuration = 0.1f;
+    
+    [SerializeField] private float turnAngle = 15f, turnDuration = 0.1f;
 
-    private Coroutine _coroutine, _smoothCoroutine;
+    private Coroutine _coroutine, _smoothCoroutine; //Saving coroutines for later using StopCoroutine() accordingly.
     private void Start()
     {
         _currentPos = positions[_index].position;
-        crashAudio.time = 0.5f;
-        GameManager.Instance.OnGameOver += (bool value) =>
-        {
-            if (_smoothCoroutine != null) StopCoroutine(_smoothCoroutine);
-            if (_coroutine != null) StopCoroutine(_coroutine);
-        };
+        crashAudio.time = 0.5f; //Sets audio accordingly.
+        GameManager.Instance.OnGameOver += GameOver;
         GameManager.Instance.OnGameRestart += Restart;
     }
 
+    /// <summary>
+    /// Sets all values to default, preventing transform, audio, and particles unwanted behaviours.
+    /// </summary>
     private void Restart()
     {
         _index = 1;
@@ -38,10 +36,23 @@ public class Player : MonoBehaviour
     }
 
     /// <summary>
-    /// Moves the position where the vehicle is at
-    /// If key is pressed to the direction where there is no valid position, it does nothing
+    /// Stops coroutine playing and sets Audio and particles off if the game was lost.
     /// </summary>
-    /// <param name="direction">Left is -1, Right is -1</param>
+    /// <param name="win">true means victory, false means defeat</param>
+    private void GameOver(bool win)
+    {
+        if (_smoothCoroutine != null) StopCoroutine(_smoothCoroutine);
+        if (_coroutine != null) StopCoroutine(_coroutine);
+        if (win) return; 
+        particles.SetActive(true);
+        crashAudio.Play();
+    }
+
+    /// <summary>
+    /// Moves the position where the vehicle is at.
+    /// If key is pressed to the direction where there is no valid position, it does nothing.
+    /// </summary>
+    /// <param name="direction">Left is -1, Right is 1</param>
     public void Move(int direction)
     {
         _index += direction;
@@ -60,11 +71,9 @@ public class Player : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Enemy"))
-        {
-            particles.SetActive(true);
-            crashAudio.Play();
+            //False means defeat
             GameManager.Instance.OnGameOver(false);
-        }
+        
     }
 
     #region Coroutines

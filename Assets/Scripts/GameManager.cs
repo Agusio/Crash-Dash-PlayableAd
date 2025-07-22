@@ -4,13 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI timerText;
     [SerializeField] private GameObject gameWonPanel, gameLostPanel, buttonsPanel;
-    private float _timer;
     [SerializeField] private float maxTime;
 
     [SerializeField] private Image backgroundImage;
@@ -21,33 +19,42 @@ public class GameManager : MonoBehaviour
     public Action OnGameRestart = delegate { };
     
     public static bool IsPaused { get; private set; }
+    public static bool IsGameEnding { get; set; }
     public static GameManager Instance { get; private set; }
+    
+    public float TimeRemaining { get; private set; }
+
+    private Dictionary<GameObject, Image> _backgroundImageDict = new();
 
     private void Awake() => Instance = this;
     public void RestartGame() => OnGameRestart?.Invoke();
 
     private void Start()
     {
-        _timer = maxTime;
         OnGameOver += GameOver;
         OnGameRestart += Restart;
-        IsPaused = false;
+        
+        Restart(); //Reusing the function for the first time the game starts.
+        
+        _backgroundImageDict.Add(gameWonPanel, gameWonPanel.GetComponent<Image>());
+        _backgroundImageDict.Add(gameLostPanel, gameLostPanel.GetComponent<Image>());
     }
 
     private void Update()
     {
         if (IsPaused) return;
-        _timer -= Time.deltaTime;
-        timerText.text = _timer.ToString("0.0");
-        if (_timer <= 0)
+        TimeRemaining -= Time.deltaTime;
+        timerText.text = TimeRemaining.ToString("0.0");
+        if (TimeRemaining <= 0)
             //True means victory
             OnGameOver?.Invoke(true);
     }
 
     private void Restart()
     {
-        _timer = maxTime;
+        TimeRemaining = maxTime;
         IsPaused = false;
+        
         gameLostPanel.SetActive(false);
         buttonsPanel.SetActive(true);
         gameWonPanel.SetActive(false);
@@ -58,10 +65,13 @@ public class GameManager : MonoBehaviour
         IsPaused = true;
         if (win) gameWonPanel.SetActive(true);
         else gameLostPanel.SetActive(true);
-        StartCoroutine(GameOverRoutine(win ? gameWonPanel.GetComponent<Image>() : gameLostPanel.GetComponent<Image>()));
+        StartCoroutine(GameOverRoutine(win ? _backgroundImageDict[gameWonPanel] : _backgroundImageDict[gameLostPanel]));
         buttonsPanel.SetActive(false);
     }
 
+    /// <summary>
+    /// Fade effect, fades in the chosen image
+    /// </summary>
     private IEnumerator GameOverRoutine(Image image)
     {
         var startColor = image.color;
@@ -75,8 +85,7 @@ public class GameManager : MonoBehaviour
             t += Time.deltaTime;
             yield return null;
         }
-
+        
         image.color = startColor;
-        yield return null;
     }
 }

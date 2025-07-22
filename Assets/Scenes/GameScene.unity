@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -133,6 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 12322569}
   - component: {fileID: 12322568}
+  - component: {fileID: 12322571}
   - component: {fileID: 12322570}
   m_Layer: 0
   m_Name: GameManager
@@ -271,6 +272,20 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &12322571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 12322567}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f44c6a10f986d741a77edc74017d51e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  finishLine: {fileID: 1094177575}
+  timeFinishLineSpawns: 2
 --- !u!1 &12329329
 GameObject:
   m_ObjectHideFlags: 0
@@ -660,7 +675,6 @@ GameObject:
   - component: {fileID: 236425329}
   - component: {fileID: 236425328}
   - component: {fileID: 236425327}
-  - component: {fileID: 236425326}
   m_Layer: 5
   m_Name: WaitToPlay
   m_TagString: Untagged
@@ -668,18 +682,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &236425326
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 236425325}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a16fc1fecc4bed468a48ad75e955600, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &236425327
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1464,7 +1466,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 2501976744756095256, guid: 9c31d14b2a4f2ac4aa983e0ee44b24c3, type: 3}
-  finishLine: {fileID: 1094177576}
   spawnPoints:
   - {fileID: 707119880}
   - {fileID: 1938553573}
@@ -2244,6 +2245,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 7.5
+  despawnTime: 3
   shouldDestroy: 0
 --- !u!23 &1094177577
 MeshRenderer:
@@ -2478,6 +2480,7 @@ MonoBehaviour:
   bobTarget: {fileID: 2116672211}
   bobAmount: 100
   bobSpeed: 4
+  repeatTimes: 5
 --- !u!1 &1635430232 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1421522762788327861, guid: 873b1db0bccd88a41949fea66f087ed7, type: 3}
@@ -2996,6 +2999,7 @@ MonoBehaviour:
   bobTarget: {fileID: 569400008}
   bobAmount: 100
   bobSpeed: 4
+  repeatTimes: 5
 --- !u!1 &2075103700
 GameObject:
   m_ObjectHideFlags: 0

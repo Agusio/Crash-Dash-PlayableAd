@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TextureMove : MonoBehaviour
@@ -18,7 +15,7 @@ public class TextureMove : MonoBehaviour
             _mat.SetFloat("_OffsetY", 0);
         };
     }
-
+    
     private void Update()
     {
         if (GameManager.IsPaused) return;

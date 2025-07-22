@@ -41,6 +41,7 @@ Shader "Unlit/TextureOffset"
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
+                //apply offset
                 float2 offsetUV = v.uv + float2(0, _OffsetY);
                 o.uv = TRANSFORM_TEX(offsetUV, _MainTex);
                 UNITY_TRANSFER_FOG(o,o.vertex);

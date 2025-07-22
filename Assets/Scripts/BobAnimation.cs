@@ -1,24 +1,28 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BobAnimation : MonoBehaviour
 {
     [SerializeField] private RectTransform bobTarget;
-    [SerializeField] private float bobAmount = 10f, bobSpeed = 2f;
-    
-    void Start()
+    [SerializeField] private float bobAmount = 10f, bobSpeed = 2f, repeatTimes = 5f;
+
+    private Coroutine _routine;
+
+    private void OnEnable()
     {
-        StartCoroutine(Bob());
+        if (_routine != null)
+            StopCoroutine(_routine);
+        _routine = StartCoroutine(Bob());
     }
 
+    
+    //Simple animation routine that moves the UI object up and down using Mathf.Sin
     private IEnumerator Bob()
     {
         Vector3 startPos = bobTarget.anchoredPosition;
         var count = 0;
 
-        while (count < 5)
+        while (count < repeatTimes)
         {
             float t = 0f;
             
